@@ -12,8 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ac431f3-8b4e-4823-8eb3-ced3162aebdc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/scene.bmp" afterPath="$PROJECT_DIR$/cmake-build-debug/scene.bmp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Sphere.cpp" afterPath="$PROJECT_DIR$/Sphere.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,12 +28,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-220">
-              <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+            <state relative-caret-position="1342">
+              <caret line="119" column="20" lean-forward="true" selection-start-line="119" selection-start-column="20" selection-end-line="119" selection-end-column="20" />
               <folding>
+                <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#404#2912#0" expanded="false" />
               </folding>
             </state>
@@ -113,11 +113,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Sphere.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Sphere.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Sphere.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+            <state relative-caret-position="654">
+              <caret line="96" column="61" lean-forward="false" selection-start-line="96" selection-start-column="61" selection-end-line="96" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -126,8 +126,8 @@
       <file leaf-file-name="Plane.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Plane.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="558">
+              <caret line="47" column="41" lean-forward="true" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -156,8 +156,8 @@
         <option value="$PROJECT_DIR$/Plane.h" />
         <option value="$PROJECT_DIR$/Plane.cpp" />
         <option value="$PROJECT_DIR$/Object.h" />
-        <option value="$PROJECT_DIR$/Sphere.cpp" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Sphere.cpp" />
       </list>
     </option>
   </component>
@@ -372,7 +372,7 @@
       <workItem from="1493742699667" duration="1249000" />
       <workItem from="1493745269229" duration="4852000" />
       <workItem from="1493841016391" duration="15247000" />
-      <workItem from="1493909644837" duration="11892000" />
+      <workItem from="1493909644837" duration="12217000" />
     </task>
     <task id="LOCAL-00001" summary="add findIntersection function for sphere and plane">
       <created>1493922299634</created>
@@ -399,7 +399,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33240000" />
+    <option name="totallyTimeSpent" value="33565000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -475,6 +475,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
+            <element signature="e#0#19#0" expanded="true" />
             <element signature="e#404#2912#0" expanded="false" />
           </folding>
         </state>
@@ -575,6 +576,7 @@
         <state relative-caret-position="242">
           <caret line="11" column="20" lean-forward="true" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
           <folding>
+            <element signature="e#0#19#0" expanded="true" />
             <element signature="e#404#2912#0" expanded="false" />
           </folding>
         </state>
@@ -593,6 +595,7 @@
         <state relative-caret-position="2200">
           <caret line="100" column="43" lean-forward="false" selection-start-line="100" selection-start-column="43" selection-end-line="100" selection-end-column="43" />
           <folding>
+            <element signature="e#0#19#0" expanded="true" />
             <element signature="e#404#2912#0" expanded="false" />
           </folding>
         </state>
@@ -681,14 +684,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Plane.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Vector.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="910">
@@ -723,10 +718,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Sphere.cpp">
+    <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+        <state relative-caret-position="1342">
+          <caret line="119" column="20" lean-forward="true" selection-start-line="119" selection-start-column="20" selection-end-line="119" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#404#2912#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Plane.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="47" column="41" lean-forward="true" selection-start-line="47" selection-start-column="41" selection-end-line="47" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -739,13 +745,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
+    <entry file="file://$PROJECT_DIR$/Sphere.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-220">
-          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-          <folding>
-            <element signature="e#404#2912#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="654">
+          <caret line="96" column="61" lean-forward="false" selection-start-line="96" selection-start-column="61" selection-end-line="96" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -69,46 +69,32 @@ double Sphere::findIntersection(Ray ray) {
      */
 
     Vector ray_origin = ray.getOrigin(); // P
-    double ray_origin_x = ray_origin.getX();
-    double ray_origin_y = ray_origin.getY();
-    double ray_origin_z = ray_origin.getZ();
-
     Vector ray_dir = ray.getDirection(); // d
-    double ray_dir_x = ray_dir.getX();
-    double ray_dir_y = ray_dir.getY();
-    double ray_dir_z = ray_dir.getZ();
-
     Vector sphere_center = center; // Q
-    double sphere_center_x = sphere_center.getX();
-    double sphere_center_y = sphere_center.getY();
-    double sphere_center_z = sphere_center.getZ();
 
     // a := d dot d
     double a = ray_dir.DotProduct(ray_dir);
 
     // v := (P - Q)
+    Vector v = ray_origin - sphere_center;
 
     // b := 2d dot v
-    double b = (2 * (ray_origin_x - sphere_center_x) * ray_dir_x) +
-            (2 * (ray_origin_y - sphere_center_y) * ray_dir_y) +
-            (2 * (ray_origin_z - sphere_center_z) * ray_dir_z);
+    double b = ray_dir.Multiply(2).DotProduct(v);
 
     // c := (v dot v) - r*r
-    double c = pow(ray_origin_x - sphere_center_x, 2) +
-            pow(ray_origin_y - sphere_center_y, 2) +
-            pow(ray_origin_z - sphere_center_z, 2) - (radius * radius);
+    double c = (v.DotProduct(v)) - radius*radius;
 
     double discriminant = b * b - 4 * c * a; // b*b - 4ac
     if (discriminant > 0) { // two solutions to the equation, the ray intersects with the sphere
         // the first root
-        double root_1 = ((-1 * b - sqrt(discriminant)) / (2*a)) - 0.000001;
+        double root_1 = ((-1 * b - sqrt(discriminant)) / (2 * a)) - 0.000001;
 
         if (root_1 > 0) {
             // the first root is the smallest positive root
             return root_1;
         } else {
             // the second root is the smallest positive root
-            double root_2 = ((sqrt(discriminant) - b) / (2*a)) - 0.000001;
+            double root_2 = ((sqrt(discriminant) - b) / (2 * a)) - 0.000001;
             return root_2;
         }
     } else {
