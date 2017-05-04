@@ -85,10 +85,6 @@ iostream
 -
 cmath
 -
-fstream
--
-sstream
--
 vector
 -
 string
@@ -100,6 +96,10 @@ stdio.h
 time.h
 -
 stdlib.h
+-
+fstream
+-
+sstream
 -
 Vector.h
 /home/shuyang/CLionProjects/RayTracing/Vector.h

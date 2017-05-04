@@ -88,6 +88,29 @@ void SaveBMP(const char *filename, int w, int h, int dpi, RGBType *data)
     fclose(f);
 }
 
+int ClosestIndex(vector<double> intersections){
+    // find the index of the closest intersection point
+    if(intersections.size() == 0){
+        return -1;
+    } else if (intersections.size() == 1) {
+        if(intersections.at(0) > 0){
+            return 0;
+        } else {
+            return -1;
+        }
+    } else {
+        // find the smallest positive value
+        double min = numeric_limits<double>::max();
+        int index = -1;
+        for (int i = 0; i < intersections.size(); ++i) {
+            if(intersections.at((unsigned long) i) > 0 && intersections.at((unsigned long) i) < min){
+                min = intersections.at((unsigned long) i);
+                index = i;
+            }
+        }
+        return index;
+    }
+}
 int main(int argc, char const *argv[])
 {
     cout << "rendering ..." << endl;
@@ -164,6 +187,10 @@ int main(int argc, char const *argv[])
                 // determine whether the ray intersect with each object in the scene
                 intersections.push_back(scene_objects.at((unsigned long) i)->findIntersection(cam_ray));
             }
+
+            int closest_index = ClosestIndex(intersections);
+
+            
 
             // Set the rgb value of each pixel
             CurrentPixel = y*width+x;

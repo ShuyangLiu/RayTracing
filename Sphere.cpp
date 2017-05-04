@@ -54,15 +54,31 @@ double Sphere::findIntersection(Ray ray) {
     double sphere_center_y = sphere_center.getY();
     double sphere_center_z = sphere_center.getZ();
 
-    double a = 1;
     double b = (2 * (ray_origin_x - sphere_center_x) * ray_dir_x) +
             (2 * (ray_origin_y - sphere_center_y) * ray_dir_y) +
             (2 * (ray_origin_z - sphere_center_z) * ray_dir_z);
+
     double c = pow(ray_origin_x - sphere_center_x, 2) +
             pow(ray_origin_y - sphere_center_y, 2) +
             pow(ray_origin_z - sphere_center_z, 2) - (radius * radius);
 
+    double discriminant = b * b - 4 * c;
+    if (discriminant > 0) {
+        // the first root
+        double root_1 = ((-1 * b - sqrt(discriminant)) / 2) - 0.000001;
 
+        if (root_1 > 0) {
+            // the first root is the smallest positive root
+            return root_1;
+        } else {
+            // the second root is the smallest positive root
+            double root_2 = ((sqrt(discriminant) - b) / 2) - 0.000001;
+            return root_2;
+        }
+    } else {
+        // the ray missed the sphere
+        return -1;
+    }
 
 }
 
