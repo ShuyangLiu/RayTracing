@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="RayTracing"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="RayTracing">
+				<Option output="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/RayTracing" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 RayTracing"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="RayTracing/fast">
+				<Option output="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/RayTracing" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/shuyang/CLionProjects/RayTracing/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 RayTracing/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/shuyang/CLionProjects/RayTracing/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Camera.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Camera.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Color.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Color.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Light.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Light.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Object.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Object.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Plane.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Plane.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Ray.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Ray.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Sphere.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Sphere.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Vector.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/Vector.h">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/main.cpp">
+			<Option target="RayTracing"/>
+		</Unit>
+		<Unit filename="/home/shuyang/CLionProjects/RayTracing/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
