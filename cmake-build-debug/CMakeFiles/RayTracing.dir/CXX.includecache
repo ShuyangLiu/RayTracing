@@ -87,8 +87,6 @@ cmath
 -
 vector
 -
-string
--
 limits
 -
 stdio.h
@@ -100,6 +98,8 @@ stdlib.h
 fstream
 -
 sstream
+-
+string
 -
 Vector.h
 /home/shuyang/CLionProjects/RayTracing/Vector.h

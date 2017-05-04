@@ -83,7 +83,8 @@ double Sphere::findIntersection(Ray ray) {
     double sphere_center_y = sphere_center.getY();
     double sphere_center_z = sphere_center.getZ();
 
-    // a := 1
+    // a := d dot d
+    double a = ray_dir.DotProduct(ray_dir);
 
     // v := (P - Q)
 
@@ -97,17 +98,17 @@ double Sphere::findIntersection(Ray ray) {
             pow(ray_origin_y - sphere_center_y, 2) +
             pow(ray_origin_z - sphere_center_z, 2) - (radius * radius);
 
-    double discriminant = b * b - 4 * c; // b*b - 4ac
+    double discriminant = b * b - 4 * c * a; // b*b - 4ac
     if (discriminant > 0) { // two solutions to the equation, the ray intersects with the sphere
         // the first root
-        double root_1 = ((-1 * b - sqrt(discriminant)) / 2) - 0.000001;
+        double root_1 = ((-1 * b - sqrt(discriminant)) / (2*a)) - 0.000001;
 
         if (root_1 > 0) {
             // the first root is the smallest positive root
             return root_1;
         } else {
             // the second root is the smallest positive root
-            double root_2 = ((sqrt(discriminant) - b) / 2) - 0.000001;
+            double root_2 = ((sqrt(discriminant) - b) / (2*a)) - 0.000001;
             return root_2;
         }
     } else {

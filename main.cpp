@@ -26,7 +26,7 @@ struct RGBType {
 };
 
 // A function for saving bmp files
-// Copied from https://en.wikipedia.org/wiki/User:Evercat/Buddhabrot.c
+// Referenced from https://en.wikipedia.org/wiki/User:Evercat/Buddhabrot.c
 void SaveBMP(const char *filename, int w, int h, int dpi, RGBType *data)
 {
     FILE *f;
@@ -109,6 +109,7 @@ int ClosestIndex(vector<double> intersections){
             }
         }
         return index;
+
     }
 }
 int main(int argc, char const *argv[])
@@ -125,37 +126,38 @@ int main(int argc, char const *argv[])
 
     RGBType *pixels = new RGBType[n];
 
+    // Origin
     Vector O (0,0,0);
 
+    // 3-D Coordinate system
     Vector X (1,0,0);
     Vector Y (0,1,0);
     Vector Z (0,0,1);
 
     Vector campos (3, 1.5, -4);
 
-    Vector look_at (0,0,0);
-    Vector diff_btw (campos.getX() - look_at.getX(),
-                     campos.getY() - look_at.getY(),
-                     campos.getZ() - look_at.getZ());
+    Vector look_at (0, 0, 0);
+    Vector diff_btw (campos.getX() - look_at.getX(), campos.getY() - look_at.getY(), campos.getZ() - look_at.getZ());
 
     Vector camdir = diff_btw.Negative().Normalize();
     Vector camright = Y.CrossProduct(camdir).Normalize();
     Vector camdown = camright.CrossProduct(camdir);
+    Camera scene_cam (campos, camdir, camright, camdown);
 
-    Camera camera(campos, camdir, camright, camdown);
-
+    // Preset Colors
     Color white_light(1.0,1.0,1.0,0.0);
     Color pretty_green(0.5,1.0,0.5,0.3);
     Color maroon(0.5,0.25,0.25, 0);
     Color grey(0.5,0.5,0.5,0.0);
     Color black(0,0,0,0);
 
+    // Adding a light to the scene
     Vector light_pos(-7, 10, -10);
     Light scene_light(light_pos, white_light);
 
+    // Adding a sphere and a plane to the scene
     Sphere scene_sphere(O, 1.0, pretty_green);
     Plane scene_plane(Y, -1, maroon);
-
     vector<Object*> scene_objects;
     scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
@@ -165,20 +167,26 @@ int main(int argc, char const *argv[])
     for (int x = 0; x < width; ++x){
         for (int y = 0; y < height; ++y){
 
-            if(width > height){
-                xamnt = ((x * 0.5) / width) * aspect_ratio - (((width-height) / (double) height) / 2);
+            if (width > height) {
+                // the image is wider than it is tall
+                xamnt = ((x + 0.5) / width) * aspect_ratio - (((width - height) / (double) height) / 2);
                 yamnt = ((height - y) + 0.5) / height;
-            } else if (width < height) {
-                xamnt = (x + 0.5) / width;
-                yamnt = (((height - y) + 0.5) / height) * aspect_ratio - (((height - width) / (double) width) / 2);
-            } else {
+            }
+            else if (height > width) {
+                // the imager is taller than it is wide
+                xamnt = (x + 0.5)/ width;
+                yamnt = (((height - y) + 0.5) / height) / aspect_ratio - (((height - width) / (double)width) / 2);
+            }
+            else {
+                // the image is square
                 xamnt = (x + 0.5) / width;
                 yamnt = ((height - y) + 0.5) / height;
             }
 
-            Vector cam_ray_origin = camera.getCamPos();
+            Vector cam_ray_origin = scene_cam.getCamPos();
             Vector cam_ray_direction = (camdir + (camright.Multiply(xamnt - 0.5) + camdown.Multiply(yamnt - 0.5))).Normalize();
 
+            // Casting a ray from scene_cam through current pixel
             Ray cam_ray (cam_ray_origin, cam_ray_direction);
 
             vector<double> intersections;
@@ -189,16 +197,23 @@ int main(int argc, char const *argv[])
 
             int closest_index = ClosestIndex(intersections);
 
-            cout << closest_index << " , ";
-
-            // Set the rgb value of each pixel
+            // determine the color for current pixel
             CurrentPixel = y*width+x;
-            pixels[CurrentPixel].r = 50.0;
-            pixels[CurrentPixel].g = 60.0;
-            pixels[CurrentPixel].b = 100.0;
+            if(closest_index == -1) {
+                pixels[CurrentPixel].r = 0;
+                pixels[CurrentPixel].g = 0;
+                pixels[CurrentPixel].b = 0;
+            } else {
+                Color current_color = scene_objects.at((unsigned long) closest_index)->getColor();
+                pixels[CurrentPixel].r = current_color.getRed();
+                pixels[CurrentPixel].g = current_color.getGreen();
+                pixels[CurrentPixel].b = current_color.getBlue();
+            }
+
         }
     }
 
+    // Save the image
     SaveBMP("scene.bmp", width, height, dpi, pixels);
 
     return 0;
