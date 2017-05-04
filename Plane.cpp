@@ -33,7 +33,7 @@ void Plane::setDistance(double distance) {
     Plane::distance = distance;
 }
 
-const Color &Plane::getColor() const {
+Color Plane::getColor() {
     return color;
 }
 
@@ -47,12 +47,12 @@ Vector Plane::getNormalAt(Vector point) {
 
 double Plane::findIntersection(Ray ray) {
     Vector ray_direction = ray.getDirection();
-    double a = ray_direction.DotProduct(normal);
+    double a = ray_direction.DotProduct(normal); //d dot n
     if(a == 0){
-        // ray is parallel to the plane
+        // ray is parallel to the plane, either contained in the plane or disjointed with the plane
         return -1;
     } else {
-        Vector ray_origin = ray.getOrigin();
+        Vector ray_origin = ray.getOrigin(); // Q
         double b = normal.DotProduct(ray_origin + (normal.Multiply(distance).Negative()));
         return -1*b/a;
     }

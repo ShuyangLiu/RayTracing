@@ -1,13 +1,13 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <string>
 #include <limits>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include "Vector.h"
 #include "Ray.h"
@@ -160,7 +160,6 @@ int main(int argc, char const *argv[])
     scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
-
     double xamnt, yamnt;
 
     for (int x = 0; x < width; ++x){
@@ -190,7 +189,7 @@ int main(int argc, char const *argv[])
 
             int closest_index = ClosestIndex(intersections);
 
-            
+            cout << closest_index << " , ";
 
             // Set the rgb value of each pixel
             CurrentPixel = y*width+x;

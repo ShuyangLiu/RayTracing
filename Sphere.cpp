@@ -30,7 +30,7 @@ void Sphere::setRadius(double radius) {
     Sphere::radius = radius;
 }
 
-const Color &Sphere::getColor() const {
+Color Sphere::getColor() {
     return color;
 }
 
@@ -39,31 +39,66 @@ void Sphere::setColor(const Color &color) {
 }
 
 double Sphere::findIntersection(Ray ray) {
-    Vector ray_origin = ray.getOrigin();
+
+    /*
+     * Let P be the origin (vantage point) of the ray, d be the direction vector of the ray
+     * All of the points on the ray can be represented as
+     *
+     *          (P + td) for some t >= 0
+     *
+     * A point X on the sphere has the property
+     *
+     *          (X - Q) = r,
+     *
+     * where Q is the center of the sphere and r is the radius of the sphere
+     * Then,
+     *          (X - Q) dot (X - Q) = r*r
+     *
+     * Plug (P + td) for X,
+     *
+     *      ((P + td) - Q) dot ((P + td) - Q) = r*r
+     *
+     * Let v be (P - Q), above can be simplified as
+     *
+     *      t = (-(2d dot v) +- sqrt(4*(d dot v)(d dot v) - 4*(d dot d)((v dot v) - r*r))) / (2*(d dot d))
+     *
+     * If we are representing ray with vector d that has unit length,
+     *
+     *      (d dot d) = 1
+     *
+     */
+
+    Vector ray_origin = ray.getOrigin(); // P
     double ray_origin_x = ray_origin.getX();
     double ray_origin_y = ray_origin.getY();
     double ray_origin_z = ray_origin.getZ();
 
-    Vector ray_dir = ray.getDirection();
+    Vector ray_dir = ray.getDirection(); // d
     double ray_dir_x = ray_dir.getX();
     double ray_dir_y = ray_dir.getY();
     double ray_dir_z = ray_dir.getZ();
 
-    Vector sphere_center = center;
+    Vector sphere_center = center; // Q
     double sphere_center_x = sphere_center.getX();
     double sphere_center_y = sphere_center.getY();
     double sphere_center_z = sphere_center.getZ();
 
+    // a := 1
+
+    // v := (P - Q)
+
+    // b := 2d dot v
     double b = (2 * (ray_origin_x - sphere_center_x) * ray_dir_x) +
             (2 * (ray_origin_y - sphere_center_y) * ray_dir_y) +
             (2 * (ray_origin_z - sphere_center_z) * ray_dir_z);
 
+    // c := (v dot v) - r*r
     double c = pow(ray_origin_x - sphere_center_x, 2) +
             pow(ray_origin_y - sphere_center_y, 2) +
             pow(ray_origin_z - sphere_center_z, 2) - (radius * radius);
 
-    double discriminant = b * b - 4 * c;
-    if (discriminant > 0) {
+    double discriminant = b * b - 4 * c; // b*b - 4ac
+    if (discriminant > 0) { // two solutions to the equation, the ray intersects with the sphere
         // the first root
         double root_1 = ((-1 * b - sqrt(discriminant)) / 2) - 0.000001;
 
@@ -76,7 +111,7 @@ double Sphere::findIntersection(Ray ray) {
             return root_2;
         }
     } else {
-        // the ray missed the sphere
+        // the ray missed the sphere or there is only one intersection point
         return -1;
     }
 

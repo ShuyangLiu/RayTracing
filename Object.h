@@ -10,9 +10,8 @@ class Object {
 public:
     Object();
     virtual ~Object();
-
-    Color getColor(); // shadow
-    double findIntersection(Ray ray);
+    virtual Color getColor();
+    virtual double findIntersection(Ray ray);
 };
 
 

@@ -21,7 +21,7 @@ public:
     void setCenter(const Vector &center);
     double getRadius() const;
     void setRadius(double radius);
-    const Color &getColor() const;
+    Color getColor();
     void setColor(const Color &color);
 
     double findIntersection(Ray ray);

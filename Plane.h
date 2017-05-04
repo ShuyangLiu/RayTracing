@@ -22,11 +22,11 @@ public:
     void setNormal(const Vector &normal);
     double getDistance() const;
     void setDistance(double distance);
-    const Color &getColor() const;
+    Color getColor();
     void setColor(const Color &color);
 
     Vector getNormalAt(Vector point);
-    double findIntersection(Ray ray);
+    virtual double findIntersection(Ray ray);
 };
 
 
