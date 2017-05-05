@@ -4,6 +4,7 @@
 
 #include "Plane.h"
 
+
 Plane::Plane() {
     normal = Vector(1,0,0);
     distance = 0.0;
@@ -45,19 +46,19 @@ Vector Plane::getNormalAt(Vector point) {
     return normal;
 }
 
-double Plane::findIntersection(Ray ray, double t_min, double t_max, hit_record &rec) {
-    Vector ray_direction = ray.getDirection();
-    double a = ray_direction.DotProduct(normal); //d dot n
+double Plane::findIntersection(Ray ray, double t_min, double t_max) {
+        Vector ray_direction = ray.getDirection();
+        Vector ray_origin = ray.getOrigin(); // Q
+        Vector norm = normal;
+        double dist = distance;
+
+    double a = ray_direction.DotProduct(norm); //d dot n
     if(a == 0){
         // ray is parallel to the plane, either contained in the plane or disjointed with the plane
         return -1;
     } else {
-        Vector ray_origin = ray.getOrigin(); // Q
-        double b = normal.DotProduct(ray_origin + (normal.Multiply(distance).Negative()));
+        double b = norm.DotProduct(ray_origin + (norm.Multiply(dist).Negative()));
         double res = -1*b/a;
-        rec.t = res;
-        rec.p = ray.pointAtParameter(res);
-        rec.normal = normal;
         return res;
     }
 }

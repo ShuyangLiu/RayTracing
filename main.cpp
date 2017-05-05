@@ -2,37 +2,47 @@
 #include <cmath>
 #include <vector>
 #include <limits>
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include <sys/time.h>
+#include <thread>
+#include <mutex>
 
 #include "Vector.h"
 #include "Ray.h"
 #include "Camera.h"
 #include "Color.h"
-#include "Light.h"
 #include "Sphere.h"
 #include "Plane.h"
 
 using namespace std;
 
-int CurrentPixel;
+mutex g_lock;
 
+// representing a color
 struct RGBType {
     double r, g, b;
 };
 
-//Color getColorAt(Vector vector, Vector direction, vector<Object *> objects, int index, double accuracy, double ambient);
+// Some global variables
+int CurrentPixel;
+int dpi = 500;
+int width = 1920*2;
+int height = 1080*2;
+RGBType *pixels;
+double aspect_ratio = (double)width / (double) height;
 
-Color getColorAt(Ray cam_ray, vector<Object*>world);
+vector<Object*> scene_objects;
+
+// Origin
+Vector O (0,0,0);
+
+// 3-D Coordinate system
+Vector X (1,0,0);
+Vector Y (0,1,0);
+Vector Z (0,0,1);
 
 // A function for saving bmp files
 // Referenced from https://en.wikipedia.org/wiki/User:Evercat/Buddhabrot.c
-void SaveBMP(const char *filename, int w, int h, int dpi, RGBType *data)
-{
+void SaveBMP(const char *filename, int w, int h, int dpi, RGBType *data) {
     FILE *f;
     int k = w*h; // k is the total number of pixels
     int s = 4*k;
@@ -113,46 +123,33 @@ int ClosestIndex(vector<double> intersections){
             }
         }
         return index;
-
     }
 }
 
-vector<Object*> scene_objects;
-int main(int argc, char const *argv[])
-{
-    cout << "rendering ..." << endl;
+Color getColorAt(Ray cam_ray, vector<Object*> world) {
+    vector<double> intersections;
+    for (int i = 0; i < scene_objects.size(); ++i) {
+        // determine whether the ray intersect with each object in the scene
+        intersections.push_back(scene_objects.at((unsigned long) i)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max()));
+    }
+    int closest_index = ClosestIndex(intersections);
+    if(closest_index != -1){
+        double intersection_t = intersections.at((unsigned long) closest_index);
+        scene_objects.at((unsigned long) closest_index)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max()); // store values to rec
+        Color obj_col = scene_objects.at((unsigned long) closest_index)->getColor();
+        Vector p = cam_ray.pointAtParameter(intersection_t);
+        Vector target = p + scene_objects.at((unsigned long) closest_index)->getNormalAt(p) +
+                Sphere::random_in_unit_sphere();
+        return getColorAt(Ray(p, target - p), world) * 0.85 * obj_col;
+    } else {
+        Vector unit_dir = cam_ray.getDirection();
+        unit_dir = unit_dir.UnitVector();
+        double t = 0.5 * (unit_dir.getY() + 0.5);
+        return Color((1.0-0.5*t), (1.0-0.3*t), 1.0, 0.0);
+    }
+}
 
-    int dpi = 72;
-    int width = 640;
-    int height = 480;
-
-    double aspect_ratio = (double)width / (double) height;
-
-    double ambient = 0.2;
-    double accuracy = 0.000001;
-
-    int n = width * height;
-
-    RGBType *pixels = new RGBType[n];
-
-    // Origin
-    Vector O (0,0,0);
-
-    // 3-D Coordinate system
-    Vector X (1,0,0);
-    Vector Y (0,1,0);
-    Vector Z (0,0,1);
-
-    Vector campos (3, 1.5, -4);
-
-    Vector look_at (0, 0, 0);
-    Vector diff_btw (campos.getX() - look_at.getX(), campos.getY() - look_at.getY(), campos.getZ() - look_at.getZ());
-
-    Vector camdir = diff_btw.Negative().Normalize();
-    Vector camright = Y.CrossProduct(camdir).Normalize();
-    Vector camdown = camright.CrossProduct(camdir);
-    Camera scene_cam (campos, camdir, camright, camdown);
-
+void AddObject(){
     // Preset Colors
     Color white_light(1.0,1.0,1.0,0.0);
     Color pretty_green(0.5,1.0,0.5,0.3);
@@ -160,25 +157,33 @@ int main(int argc, char const *argv[])
     Color grey(0.5,0.5,0.5,0.0);
     Color black(0,0,0,0);
 
-    // Adding a light to the scene
-    Vector light_pos(-7, 10, -10);
-    Light scene_light(light_pos, white_light);
-
-    vector<Light*>scene_lights;
-    scene_lights.push_back(&scene_light);
-
     // Adding a sphere and a plane to the scene
-    Sphere scene_sphere(O, 1.0, pretty_green);
-    Plane scene_plane(Y, -1, maroon);
+    Sphere *scene_sphere = new Sphere(O, 1.0, pretty_green);
+    Sphere *scene_sphere_2 = new Sphere(Vector(-2,0,0), 1.0, pretty_green);
+    Sphere *scene_sphere_3 = new Sphere(Vector(1,1,0), 1.0, white_light);
+    Plane *scene_plane = new Plane(Y, -1, maroon);
 
-    scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
-    scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
+    scene_objects.push_back(dynamic_cast<Object*>(scene_sphere));
+    scene_objects.push_back(dynamic_cast<Object*>(scene_sphere_2));
+    scene_objects.push_back(dynamic_cast<Object*>(scene_sphere_3));
+    scene_objects.push_back(dynamic_cast<Object*>(scene_plane));
 
-    double xamnt, yamnt;
+}
 
-    for (int x = 0; x < width; ++x){
-        for (int y = 0; y < height; ++y){
+void func1 (int y_start, int y_end, Camera cam) {
 
+    Vector cam_ray_origin = cam.getCamPos();
+    Vector camdir = cam.getCamDir();
+    Vector camright = cam.getCamRight();
+    Vector camdown = cam.getCamDown();
+
+    int x_start = 0;
+    int x_end = width;
+
+    for(int x = x_start; x < x_end; ++x){
+        for(int y = y_start; y < y_end; ++y) {
+
+            double xamnt, yamnt;
             if (width > height) {
                 // the image is wider than it is tall
                 xamnt = ((x + 0.5) / width) * aspect_ratio - (((width - height) / (double) height) / 2);
@@ -195,7 +200,6 @@ int main(int argc, char const *argv[])
                 yamnt = ((height - y) + 0.5) / height;
             }
 
-            Vector cam_ray_origin = scene_cam.getCamPos();
             Vector cam_ray_direction = (camdir + (camright.Multiply(xamnt - 0.5) + camdown.Multiply(yamnt - 0.5))).Normalize();
 
             // Casting a ray from scene_cam through current pixel
@@ -203,42 +207,74 @@ int main(int argc, char const *argv[])
 
             // determine the color for current pixel
             CurrentPixel = y*width+x;
-            Color cc = getColorAt(cam_ray, scene_objects);
 
-                pixels[CurrentPixel].r = cc.getRed();
-                pixels[CurrentPixel].g = cc.getGreen();
-                pixels[CurrentPixel].b = cc.getBlue();
+            g_lock.lock();
+                Color cc = getColorAt(cam_ray, scene_objects);
+            g_lock.unlock();
+
+            RGBType col;
+            col.r = cc.getRed();
+            col.g = cc.getGreen();
+            col.b = cc.getBlue();
+            pixels[CurrentPixel] = col;
+
 
         }
     }
 
+}
+
+
+int main(int argc, char const *argv[])
+{
+
+    pixels = new RGBType[width*height];
+
+    const int t = 8; // number of threads
+
+    struct timeval t1, t2;
+
+    // Camera Setting
+    Vector campos (3, 1.5, -4);
+    Vector look_at (0, 0, 0);
+    Vector diff_btw (campos.getX() - look_at.getX(), campos.getY() - look_at.getY(), campos.getZ() - look_at.getZ());
+    Vector camdir = diff_btw.Negative().Normalize();
+    Vector camright = Y.CrossProduct(camdir).Normalize();
+    Vector camdown = camright.CrossProduct(camdir);
+    Camera scene_cam (campos, camdir, camright, camdown);
+
+    //Add Objects into scene
+    AddObject();
+    cout << "rendering ..." << endl;
+
+    // distribute work into threads
+    array<int, t> work_distribution;
+    int ave = height / t;
+    int rem = height % t;
+    for (int j = 0; j < t; ++j) {
+        work_distribution[j] = ave;
+    }
+    for (int j = 0; j < rem; ++j) {
+        work_distribution[j] += 1;
+    }
+    int start_row = 0;
+
+    gettimeofday(&t1, 0);
+    thread *t_list = new thread[t];
+    for (int i = 0; i < t; ++i) {
+        t_list[i] = thread (func1, start_row, (start_row+work_distribution[i]), scene_cam);
+        start_row += work_distribution[i];
+    }
+    for (int k = 0; k < t; ++k){
+        t_list[k].join();
+    }
+    gettimeofday(&t2, 0);
+
     // Save the image
     SaveBMP("scene.bmp", width, height, dpi, pixels);
+    fprintf(stdout, "Total Time:  %f seconds\n", (t2.tv_sec - t1.tv_sec) + (t2.tv_usec - t1.tv_usec) * 0.000001);
 
     return 0;
 }
 
-Color getColorAt(Ray cam_ray, vector<Object*>world){
-    vector<double> intersections;
-    hit_record rec;
-    for (int i = 0; i < scene_objects.size(); ++i) {
-        // determine whether the ray intersect with each object in the scene
-        intersections.push_back(scene_objects.at((unsigned long) i)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max(), rec));
-    }
-    int closest_index = ClosestIndex(intersections);
 
-    if(closest_index != -1){
-        scene_objects.at((unsigned long) closest_index)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max(), rec); // store values to rec
-        Color obj_col = scene_objects.at((unsigned long) closest_index)->getColor();
-        // hit
-        Vector target = rec.p + rec.normal + Sphere::random_in_unit_sphere();
-        return getColorAt(Ray(rec.p, target - rec.p), world) * 0.7 * obj_col;
-    } else {
-        Vector unit_dir = cam_ray.getDirection();
-        unit_dir = unit_dir.UnitVector();
-        double t = 0.5 * (unit_dir.getY() + 1.0);
-        return Color((1.0-0.5*t), (1.0-0.3*t), 1.0, 0.0);
-    }
-
-
-}

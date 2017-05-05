@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Sphere.h"
 
+
 Sphere::Sphere(const Vector &center, double radius, const Color &color) : center(center), radius(radius),
                                                                           color(color) {}
 
@@ -39,7 +40,7 @@ void Sphere::setColor(const Color &color) {
     Sphere::color = color;
 }
 
-double Sphere::findIntersection(Ray ray, double t_min, double t_max, hit_record &rec) {
+double Sphere::findIntersection(Ray ray, double t_min, double t_max) {
 
     /*
      * Let P be the origin (vantage point) of the ray, d be the direction vector of the ray
@@ -71,7 +72,8 @@ double Sphere::findIntersection(Ray ray, double t_min, double t_max, hit_record 
 
     Vector ray_origin = ray.getOrigin(); // P
     Vector ray_dir = ray.getDirection(); // d
-    Vector sphere_center = center; // Q
+    Vector sphere_center = this->center; // Q
+    double sphere_r = this->radius;
 
     // a := d dot d
     double a = ray_dir.DotProduct(ray_dir);
@@ -83,22 +85,16 @@ double Sphere::findIntersection(Ray ray, double t_min, double t_max, hit_record 
     double b = ray_dir.Multiply(2).DotProduct(v);
 
     // c := (v dot v) - r*r
-    double c = (v.DotProduct(v)) - radius*radius;
+    double c = (v.DotProduct(v)) - sphere_r*sphere_r;
 
     double discriminant = b * b - 4 * c * a; // b*b - 4ac
     if (discriminant > 0) { // two solutions to the equation, the ray intersects with the sphere
         // the first root
         double root_1 = ((-1 * b - sqrt(discriminant)) / (2 * a)) - 0.000001;
         if (root_1 > t_min && root_1 < t_max) {
-            rec.t = root_1;
-            rec.p = ray.pointAtParameter(root_1);
-            rec.normal = getNormalAt(rec.p);
             return root_1;
         } else {
             double root_2 = ((sqrt(discriminant) - b) / (2 * a)) - 0.000001;
-            rec.t = root_2;
-            rec.p = ray.pointAtParameter(root_2);
-            rec.normal = getNormalAt(rec.p);
             return root_2;
         }
     } else {

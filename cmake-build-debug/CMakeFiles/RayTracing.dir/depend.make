@@ -42,7 +42,6 @@ CMakeFiles/RayTracing.dir/Vector.cpp.o: ../Vector.h
 
 CMakeFiles/RayTracing.dir/main.cpp.o: ../Camera.h
 CMakeFiles/RayTracing.dir/main.cpp.o: ../Color.h
-CMakeFiles/RayTracing.dir/main.cpp.o: ../Light.h
 CMakeFiles/RayTracing.dir/main.cpp.o: ../Object.h
 CMakeFiles/RayTracing.dir/main.cpp.o: ../Plane.h
 CMakeFiles/RayTracing.dir/main.cpp.o: ../Ray.h
