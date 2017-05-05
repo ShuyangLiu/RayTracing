@@ -91,6 +91,8 @@ vector
 -
 limits
 -
+omp.h
+-
 stdio.h
 -
 time.h

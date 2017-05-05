@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <limits>
+#include <omp.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -174,44 +175,50 @@ int main(int argc, char const *argv[])
     scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
+    int x, y;
     double xamnt, yamnt;
 
-    for (int x = 0; x < width; ++x){
-        for (int y = 0; y < height; ++y){
+#pragma omp parallel private(xamnt, yamnt, x, y) shared(scene_objects, pixels, width, height, camdir, campos, camright, camdown)
+    {
+        #pragma omp for schedule(dynamic)
+        for (x = 0; x < width; ++x) {
+            for (y = 0; y < height; ++y) {
+                if (width > height) {
+                    // the image is wider than it is tall
+                    xamnt = ((x + 0.5) / width) * aspect_ratio - (((width - height) / (double) height) / 2);
+                    yamnt = ((height - y) + 0.5) / height;
+                } else if (height > width) {
+                    // the imager is taller than it is wide
+                    xamnt = (x + 0.5) / width;
+                    yamnt = (((height - y) + 0.5) / height) / aspect_ratio - (((height - width) / (double) width) / 2);
+                } else {
+                    // the image is square
+                    xamnt = (x + 0.5) / width;
+                    yamnt = ((height - y) + 0.5) / height;
+                }
 
-            if (width > height) {
-                // the image is wider than it is tall
-                xamnt = ((x + 0.5) / width) * aspect_ratio - (((width - height) / (double) height) / 2);
-                yamnt = ((height - y) + 0.5) / height;
-            }
-            else if (height > width) {
-                // the imager is taller than it is wide
-                xamnt = (x + 0.5)/ width;
-                yamnt = (((height - y) + 0.5) / height) / aspect_ratio - (((height - width) / (double)width) / 2);
-            }
-            else {
-                // the image is square
-                xamnt = (x + 0.5) / width;
-                yamnt = ((height - y) + 0.5) / height;
-            }
+                Vector cam_ray_origin = campos;
+                Vector cam_ray_direction = (camdir + (camright.Multiply(xamnt - 0.5) +
+                                                      camdown.Multiply(yamnt - 0.5))).Normalize();
 
-            Vector cam_ray_origin = scene_cam.getCamPos();
-            Vector cam_ray_direction = (camdir + (camright.Multiply(xamnt - 0.5) + camdown.Multiply(yamnt - 0.5))).Normalize();
+                // Casting a ray from scene_cam through current pixel
+                Ray cam_ray(cam_ray_origin, cam_ray_direction);
 
-            // Casting a ray from scene_cam through current pixel
-            Ray cam_ray (cam_ray_origin, cam_ray_direction);
+                // determine the color for current pixel
+                CurrentPixel = y * width + x;
+                Color cc;
 
-            // determine the color for current pixel
-            CurrentPixel = y*width+x;
-            Color cc = getColorAt(cam_ray, scene_objects);
+                #pragma omp critical
+                    cc = getColorAt(cam_ray, scene_objects);
 
                 pixels[CurrentPixel].r = cc.getRed();
                 pixels[CurrentPixel].g = cc.getGreen();
                 pixels[CurrentPixel].b = cc.getBlue();
 
+            }
         }
     }
-
+#pragma omp barrier
     // Save the image
     SaveBMP("scene.bmp", width, height, dpi, pixels);
 
