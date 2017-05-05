@@ -25,6 +25,10 @@ struct RGBType {
     double r, g, b;
 };
 
+//Color getColorAt(Vector vector, Vector direction, vector<Object *> objects, int index, double accuracy, double ambient);
+
+Color getColorAt(Ray cam_ray, vector<Object*>world);
+
 // A function for saving bmp files
 // Referenced from https://en.wikipedia.org/wiki/User:Evercat/Buddhabrot.c
 void SaveBMP(const char *filename, int w, int h, int dpi, RGBType *data)
@@ -112,6 +116,8 @@ int ClosestIndex(vector<double> intersections){
 
     }
 }
+
+vector<Object*> scene_objects;
 int main(int argc, char const *argv[])
 {
     cout << "rendering ..." << endl;
@@ -121,6 +127,9 @@ int main(int argc, char const *argv[])
     int height = 480;
 
     double aspect_ratio = (double)width / (double) height;
+
+    double ambient = 0.2;
+    double accuracy = 0.000001;
 
     int n = width * height;
 
@@ -155,10 +164,13 @@ int main(int argc, char const *argv[])
     Vector light_pos(-7, 10, -10);
     Light scene_light(light_pos, white_light);
 
+    vector<Light*>scene_lights;
+    scene_lights.push_back(&scene_light);
+
     // Adding a sphere and a plane to the scene
     Sphere scene_sphere(O, 1.0, pretty_green);
     Plane scene_plane(Y, -1, maroon);
-    vector<Object*> scene_objects;
+
     scene_objects.push_back(dynamic_cast<Object*>(&scene_sphere));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
@@ -189,26 +201,13 @@ int main(int argc, char const *argv[])
             // Casting a ray from scene_cam through current pixel
             Ray cam_ray (cam_ray_origin, cam_ray_direction);
 
-            vector<double> intersections;
-            for (int i = 0; i < scene_objects.size(); ++i) {
-                // determine whether the ray intersect with each object in the scene
-                intersections.push_back(scene_objects.at((unsigned long) i)->findIntersection(cam_ray));
-            }
-
-            int closest_index = ClosestIndex(intersections);
-
             // determine the color for current pixel
             CurrentPixel = y*width+x;
-            if(closest_index == -1) {
-                pixels[CurrentPixel].r = 0;
-                pixels[CurrentPixel].g = 0;
-                pixels[CurrentPixel].b = 0;
-            } else {
-                Color current_color = scene_objects.at((unsigned long) closest_index)->getColor();
-                pixels[CurrentPixel].r = current_color.getRed();
-                pixels[CurrentPixel].g = current_color.getGreen();
-                pixels[CurrentPixel].b = current_color.getBlue();
-            }
+            Color cc = getColorAt(cam_ray, scene_objects);
+
+                pixels[CurrentPixel].r = cc.getRed();
+                pixels[CurrentPixel].g = cc.getGreen();
+                pixels[CurrentPixel].b = cc.getBlue();
 
         }
     }
@@ -217,4 +216,29 @@ int main(int argc, char const *argv[])
     SaveBMP("scene.bmp", width, height, dpi, pixels);
 
     return 0;
+}
+
+Color getColorAt(Ray cam_ray, vector<Object*>world){
+    vector<double> intersections;
+    hit_record rec;
+    for (int i = 0; i < scene_objects.size(); ++i) {
+        // determine whether the ray intersect with each object in the scene
+        intersections.push_back(scene_objects.at((unsigned long) i)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max(), rec));
+    }
+    int closest_index = ClosestIndex(intersections);
+
+    if(closest_index != -1){
+        scene_objects.at((unsigned long) closest_index)->findIntersection(cam_ray, 0.0, numeric_limits<double>::max(), rec); // store values to rec
+        Color obj_col = scene_objects.at((unsigned long) closest_index)->getColor();
+        // hit
+        Vector target = rec.p + rec.normal + Sphere::random_in_unit_sphere();
+        return getColorAt(Ray(rec.p, target - rec.p), world) * 0.7 * obj_col;
+    } else {
+        Vector unit_dir = cam_ray.getDirection();
+        unit_dir = unit_dir.UnitVector();
+        double t = 0.5 * (unit_dir.getY() + 1.0);
+        return Color((1.0-0.5*t), (1.0-0.3*t), 1.0, 0.0);
+    }
+
+
 }

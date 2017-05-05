@@ -27,6 +27,7 @@ public:
     Vector Negative();
 
     Vector operator + (Vector vec);
+    Vector operator * (double t);
     Vector operator - (Vector vec);
     Vector operator = (Vector vec);
     Vector operator +=(Vector vec);

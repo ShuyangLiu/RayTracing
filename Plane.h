@@ -26,7 +26,8 @@ public:
     void setColor(const Color &color);
 
     Vector getNormalAt(Vector point);
-    virtual double findIntersection(Ray ray);
+    double findIntersection(Ray ray, double t_min, double t_max, hit_record &rec);
+
 };
 
 

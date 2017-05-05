@@ -18,6 +18,21 @@ public:
     void setBlue(double blue);
     double getSpecial() const;
     void setSpecial(double special);
+
+    double brightness();
+    Color colorScale(double scale);
+    Color Add(Color color);
+    Color Multiply(Color color);
+    Color Average(Color color);
+
+    Color operator-();
+    Color operator*(Color color);
+    Color operator*(double k);
+    Color operator/(double k);
+    Color operator+=(Color color);
+    Color operator-=(Color color);
+    Color operator*=(Color color);
+    Color operator/=(Color color);
 };
 
 

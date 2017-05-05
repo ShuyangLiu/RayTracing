@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include "Sphere.h"
 
 Sphere::Sphere(const Vector &center, double radius, const Color &color) : center(center), radius(radius),
@@ -38,7 +39,7 @@ void Sphere::setColor(const Color &color) {
     Sphere::color = color;
 }
 
-double Sphere::findIntersection(Ray ray) {
+double Sphere::findIntersection(Ray ray, double t_min, double t_max, hit_record &rec) {
 
     /*
      * Let P be the origin (vantage point) of the ray, d be the direction vector of the ray
@@ -88,13 +89,16 @@ double Sphere::findIntersection(Ray ray) {
     if (discriminant > 0) { // two solutions to the equation, the ray intersects with the sphere
         // the first root
         double root_1 = ((-1 * b - sqrt(discriminant)) / (2 * a)) - 0.000001;
-
-        if (root_1 > 0) {
-            // the first root is the smallest positive root
+        if (root_1 > t_min && root_1 < t_max) {
+            rec.t = root_1;
+            rec.p = ray.pointAtParameter(root_1);
+            rec.normal = getNormalAt(rec.p);
             return root_1;
         } else {
-            // the second root is the smallest positive root
             double root_2 = ((sqrt(discriminant) - b) / (2 * a)) - 0.000001;
+            rec.t = root_2;
+            rec.p = ray.pointAtParameter(root_2);
+            rec.normal = getNormalAt(rec.p);
             return root_2;
         }
     } else {
@@ -108,4 +112,12 @@ Vector Sphere::getNormalAt(Vector point) {
     //normal always points in a direction away from the center of the sphere
     Vector normal_vec = (point + center.Negative()).Normalize();
     return normal_vec;
+}
+
+Vector Sphere::random_in_unit_sphere() {
+    Vector p;
+    do {
+        p = Vector(drand48(), drand48(), drand48()).Multiply(2.0) - Vector(1.0,1.0,1.0);
+    } while (p.DotProduct(p) >= 1.0);
+    return p;
 }

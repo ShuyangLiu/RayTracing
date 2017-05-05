@@ -15,6 +15,8 @@ public:
     const Vector &getDirection() const;
     void setDirection(const Vector &direction);
 
+    Vector pointAtParameter(double t);
+
 };
 
 

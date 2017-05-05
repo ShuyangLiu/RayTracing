@@ -117,4 +117,9 @@ Vector Vector::operator-() {
     return Negative();
 }
 
+Vector Vector::operator*(double t) {
+    return Multiply(t);
+}
+
+
 

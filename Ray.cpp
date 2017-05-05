@@ -23,5 +23,9 @@ void Ray::setDirection(const Vector &direction) {
     Ray::direction = direction;
 }
 
+Vector Ray::pointAtParameter(double t) {
+    return vantage + (direction*t);
+}
+
 
 

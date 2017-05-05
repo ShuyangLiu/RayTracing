@@ -45,7 +45,7 @@ Vector Plane::getNormalAt(Vector point) {
     return normal;
 }
 
-double Plane::findIntersection(Ray ray) {
+double Plane::findIntersection(Ray ray, double t_min, double t_max, hit_record &rec) {
     Vector ray_direction = ray.getDirection();
     double a = ray_direction.DotProduct(normal); //d dot n
     if(a == 0){
@@ -54,6 +54,10 @@ double Plane::findIntersection(Ray ray) {
     } else {
         Vector ray_origin = ray.getOrigin(); // Q
         double b = normal.DotProduct(ray_origin + (normal.Multiply(distance).Negative()));
-        return -1*b/a;
+        double res = -1*b/a;
+        rec.t = res;
+        rec.p = ray.pointAtParameter(res);
+        rec.normal = normal;
+        return res;
     }
 }
