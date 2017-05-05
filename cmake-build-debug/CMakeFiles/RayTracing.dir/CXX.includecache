@@ -59,6 +59,8 @@ Vector.h
 /home/shuyang/CLionProjects/RayTracing/Vector.h
 
 /home/shuyang/CLionProjects/RayTracing/Sphere.cpp
+stdlib.h
+-
 Sphere.h
 /home/shuyang/CLionProjects/RayTracing/Sphere.h
 
